@@ -1,0 +1,57 @@
+[package]
+name = "photobrowser"
+version = "1.37.0"
+edition = "2021"
+rust-version = "1.96"
+description = "PhotoBrowser — a libcosmic photo browser"
+license = "GPL-3.0-or-later"
+readme = "README.md"
+repository = "https://github.com/Newport1/COSMIC_PhotoBrowser"
+keywords = ["photo", "cosmic", "raw", "browser", "xmp"]
+categories = ["multimedia::images", "filesystem"]
+publish = false
+
+[lib]
+name = "photobrowser"
+path = "src/lib.rs"
+
+[[bin]]
+name = "photobrowser"
+path = "src/main.rs"
+
+[dependencies]
+exif = { package = "kamadak-exif", version = "0.6.1", optional = true }
+image = "0.25"
+md5 = "0.8.0"
+rawler = "=0.7.2"
+lru = "0.18.0"
+rayon = "1"
+notify = "8"
+directories = "6"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+chrono = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+jpeg-decoder = "0.3.2"
+rusqlite = { version = "0.32", features = ["bundled"] }
+sha2 = "0.10"
+palette = "0.7.6"
+
+[dev-dependencies]
+tempfile = "3"
+
+[features]
+default = ["exif"]
+exif = ["dep:exif"]
+
+[profile.release]
+opt-level = 3
+
+[target.'cfg(target_os = "macos")'.dependencies]
+# libcosmic's default feature set enables Wayland-only components that cannot
+# compile on macOS. The native winit/wgpu backend remains available for checks.
+cosmic = { package = "libcosmic", git = "https://github.com/pop-os/libcosmic.git", rev = "bb10afd849f1ad172be6b78eeec347d548aa4fd7", default-features = false, features = ["tokio", "winit", "wgpu", "multi-window"] }
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+cosmic = { package = "libcosmic", git = "https://github.com/pop-os/libcosmic.git", rev = "bb10afd849f1ad172be6b78eeec347d548aa4fd7", features = ["tokio", "winit", "wayland", "wgpu"] }
