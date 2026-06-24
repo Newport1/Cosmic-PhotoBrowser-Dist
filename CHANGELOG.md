@@ -1,6 +1,5 @@
 # PhotoBrowser Changelog
 
-All entries below are shortened to actual feature, behavior, or user-visible fix changes only. Internal refactors, test counts, implementation gates, agent/process notes, and planning-file references are intentionally omitted.
 
 ## 1.36.0 — 2026-06-22
 
